@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  tomcat.max-threads: 400
+  
+spring:
+  jackson:
+    time-zone: GMT+8
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/google_analytics
+    username: root
+    password: root
+    hikari:
+      connection-test-query: SELECT 1 FROM DUAL
+      minimum-idle: 5
+      maximum-pool-size: 50
+      pool-name: mbs
+      auto-commit: false
+ 
+  

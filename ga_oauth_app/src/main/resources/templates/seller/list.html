@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="gata_config::gata_user_js('Seller Page', null,true)"/>
+
+<body>
+	<div th:each="seller:${sellers}" >
+		<button th:text="*{seller.name}" th:onclick = "chooseSeller([[*{seller.name}]])"></button>
+	</div>
+	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+	<div th:if="${session._ga_user_id!=null}">
+		<a href="/google/api/hello">see hello report</a><br/>
+		<a href="/google/api/cohort">see cohort report</a><br/>
+		<a href="/google/api/custom_dimension_metric">see custom_dimension_metric report</a><br/>
+		<a href="/google/api/dynamit_segment">see dynamit_segment report</a><br/>
+		<a href="/google/api/event_category">see event_category report</a><br/>
+		<a href="/google/api/histogram_buckets">see histogram_buckets report</a><br/>
+		<a href="/google/api/pivot_table">see pivot_table report</a><br/>
+		<a href="/google/api/segment_id">see segment_id report</a><br/>
+	</div>
+</body>
+<script type="text/javascript">
+function chooseSeller(sellerName){
+	gtag('event', sellerName, {
+		  'event_category': 'event_choose_seller',
+		  'event_callback': createFunctionWithTimeout(function() {
+			  window.location.href = "/category/"+sellerName;
+		    })
+	});
+}
+</script>
+</html>

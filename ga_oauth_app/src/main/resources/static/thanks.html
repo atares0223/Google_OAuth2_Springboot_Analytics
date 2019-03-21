@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Pay Page</title>
+<script async
+	src="https://www.googletagmanager.com/gtag/js?id=UA-135887668-1"></script>
+<script  th:inline="javascript">
+window.dataLayer = window.dataLayer || [];
+
+function gtag() {
+	dataLayer.push(arguments);
+}
+gtag('js', new Date());
+var config_map = new Object();
+config_map.page_title = "Thanks Page";
+config_map.page_path = "/thanks.html";
+var parameters = getRequest();
+var user_id = parameters.user_id;
+if (user_id) {
+	config_map.user_id = user_id;
+}
+gtag('config', 'UA-135887668-1',config_map);
+
+function getRequest() {
+	   var url = location.search; //
+	   var theRequest = new Object();
+	   if (url.indexOf("?") != -1) {
+	      var str = url.substr(1);
+	      strs = str.split("&");
+	      for(var i = 0; i < strs.length; i ++) {
+	         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+	      }
+	   }
+	   return theRequest;
+	}
+</script>
+</head>
+<body>
+<h2>Pay Page</h2>
+	<p>Thanks for you payment</p>
+	
+</body>
+</html>

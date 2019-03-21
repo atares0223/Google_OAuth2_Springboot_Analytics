@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Register Page</title>
+<script async
+	src="https://www.googletagmanager.com/gtag/js?id=UA-134333869-4"></script>
+<script type="text/javascript" src="/gtag.js"></script>
+<script type="text/javascript" src = "/gtag_leave_page.js"></script>
+<script type="text/javascript" src="/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/jquery.form.js"></script>
+</head>
+<body>
+	<h2>Register Page</h2>
+
+	<form id="registerForm" action="/user/register"
+		th:action="@{/user/register}">
+		<div>
+			<label for="email">email</label> <input type="text" name="email"
+				id="email" />
+		</div>
+		<div>
+			<label for="name">name</label> <input type="text" name="name"
+				id="name" />
+		</div>
+		<div>
+			<label for="password">password</label> <input type="password"
+				name="password" id="password" />
+		</div>
+		<input type="submit" value='regitser' />
+	</form>
+	<a href="login.html" th:href="@{login.html}" onclick="register()">Sign
+		in?</a>
+</body>
+<script type="text/javascript">
+	$("#registerForm").on("submit", function(event) {
+		event.preventDefault();
+		var validate = true;
+		$("#registerForm input[name]").each(function(i, dom) {
+			console.log(dom.value);
+			if (!dom.value) {
+				alert(dom.id + "  not valid");
+				validate = false;
+				return false;
+			}
+		});
+		gtag('event', 'register', {
+			  'event_category': 'event_login',
+			  'event_label': validate,
+			  'value': (validate ? 0.1:0),
+			  'event_callback': createFunctionWithTimeout(function() {
+				  if (validate) {
+						$("#registerForm").ajaxSubmit({
+							type : "POST",
+							success : function(response) {
+								if (response.statusCode === 200) {
+									alert("register successfully");
+									window.location.href = "login.html";
+								} else {
+									alert(response.msg);
+								}
+							}
+						});
+					}
+			    })
+			});
+	});
+</script>
+</html>

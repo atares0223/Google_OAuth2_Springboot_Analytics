@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:include="gata_config::gata_user_js('Sku Page','dimension1:hit_prefered_delivery_options,dimension2:session_prefered_delivery_options,dimension3:user_prefered_delivery_options,metric1:selection_count',true)"/>
+<body>
+	<div name ='import_js' th:replace = "import_jq::jq(true)"/>
+	
+	<h2>Sku Page</h2>
+	<form id="payForm" action="/pay">
+		<div th:each="property:${properties}">
+			<label th:for="*{property.name}">[[*{property.name}]]</label> <select
+				th:name="*{property.name}" th:id="*{property.name}">
+				<option th:each="propertyValue:*{property.values}"
+					th:text="*{propertyValue}"></option>
+			</select>
+		</div>
+		<div>
+			<label for="quantity">quantity</label> <input type="number"
+				name="quantity" id="quantity" />
+		</div>
+		<div>
+			<label for="address">address</label>
+			<textarea rows="3" name="address" id="address"></textarea>
+
+		</div>
+		<div>
+			<label for="delivery">delivery</label> <select name="delivery"
+				id="delivery">
+				<option></option>
+				<option>Standard Delivery (3-4 days)</option>
+				<option>Same-Day</option>
+			</select>
+		</div>
+		<div>
+			<label for="phone">phone</label> <input type="phone"
+				name="phone" id="phone" />
+		</div>
+		<input type="submit" value='pay' />
+	</form>
+	<div id = 'h_goal'></div>
+</body>
+
+<script type="text/javascript">
+
+$("#delivery").on("change",function(event){
+	gtag('event', this.value, {
+		  'event_category': 'select_delivery_option'
+		});
+	gtag('event', 'prefered_delivery_options_dimension&selection_count_metric', {'hit_prefered_delivery_options': this.value,
+		'session_prefered_delivery_options': this.value,
+		'user_prefered_delivery_options': this.value,
+		'selection_count': 1});
+})
+
+var form = document.getElementById('payForm');
+form.addEventListener('submit', function(event) {
+	 event.preventDefault();
+	  var validate = true;
+	  $( "#payForm :input" ).each(function(i,dom){
+		  if(!dom.value){
+			  alert(dom.id +"  not valid");
+			  validate = false;
+			  return false;
+		  }
+	  });
+	  gtag('event', 'validate_form', {
+		  'event_category': 'event_place_order',
+		  'event_label': validate
+		});
+	  
+	  gtag('event', 'enter_phone_action', {
+		  'event_category': 'enter_phone_category',
+		  'event_label': $("#phone").val()
+		});
+	  
+	  if(validate){
+		  if(confirm("checkout?")){
+			  gtag('event', 'finish_payment', {
+				  'event_category': 'event_finish_payment',
+				  'event_callback': createFunctionWithTimeout(function() {
+					  $("#payForm").ajaxSubmit({
+							type : "POST",
+							success : function(response) {
+								if (response.statusCode === 200) {
+									$("#h_goal").html("<iframe hidden='' src='/thanks.html?timestamp="+new Date().getTime()+"&user_id="+user_id+"'></iframe>");
+									alert("payment successfully!");
+								} else {
+									alert(response.msg);
+								}
+							}
+						});
+
+				   })
+				});
+		  }else{
+			  gtag('event', 'cancel_payment', {
+				  'event_category': 'event_cancel_payment'
+				});
+		  }
+		 
+	  }
+});
+
+</script>
+</html>

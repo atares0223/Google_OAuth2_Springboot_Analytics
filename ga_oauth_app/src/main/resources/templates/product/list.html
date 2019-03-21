@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="gata_config::gata_user_js('Product Page', null,true)"/>
+<body>
+	<div th:each="product:${products}" >
+		<button th:text="*{product.name}" th:onclick = "chooseProduct([[*{product.name}]])"></button>
+	</div>
+</body>
+<script type="text/javascript">
+function chooseProduct(productName){
+	gtag('event', productName, {
+		  'event_category': 'event_choose_product',
+		  'event_callback': createFunctionWithTimeout(function() {
+			  window.location.href = "/sku/"+productName;
+		    })
+		});
+}
+</script>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Member Login</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-135887668-1"></script>
+<script type="text/javascript" src = "/gtag.js"></script>
+<script type="text/javascript" src = "/gtag_leave_page.js"></script>
+<script type="text/javascript" src = "/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src = "/jquery.form.js"></script>
+</head>
+<body>
+<h2>Member Login</h2>
+<div>
+	<form  id = "loginForm" action="/user/login" >
+		<div>
+			<label for="email">email</label>
+			<input type = "text" name = "email" id = "email"/>
+			<label for="password">password</label>
+			<input type = "password" name = "password" id = "password"/>
+			<input type = "submit" value = 'login'/>
+		</div>
+	</form>
+	<div>
+		<a href="register.html">Create a Account?</a>
+	</div>
+	<div>
+		<a href="user/guest">visit as a guest?</a>
+	</div>
+</div>
+</body>
+
+<script type="text/javascript">
+$("#loginForm" ).on( "submit", function( event ) {
+	 event.preventDefault();
+	  var validate = true;
+	  $( "#loginForm input[name]" ).each(function(i,dom){
+		  console.log(dom.value);
+		  if(!dom.value){
+			  alert(dom.id +"  not valid");
+			  validate = false;
+			  return false;
+		  }
+	  });
+	  gtag('event', 'login', {
+		  'event_category': 'event_login',
+		  'event_label': validate,
+		  'value': (validate ? 0.001:0),
+		  'event_callback': createFunctionWithTimeout(function() {
+			  if(validate){
+				  $("#loginForm" ).ajaxSubmit({
+					  success: function(response) {
+			               	if(response.statusCode === 200){
+			               		window.location.href= "/seller/list"
+			               	}else{
+			               		alert(response.msg);
+			               	}
+			            }
+				  });
+			  }
+		    })
+		});
+	
+	});
+	
+
+</script>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:replace="gata_config::gata_user_js(|${title} title|, null,true)"/>
+<style type="text/css">
+table {
+    font-family: verdana,arial,sans-serif;
+    font-size:11px;
+    color:#333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+    text-align: center;
+}
+table th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #dedede;
+}
+table td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+}
+</style>
+<body>
+	<div th:if="${consoleTable!=null}">
+		<table text_align = 'center' border="1px">
+			<tr>
+				<th  th:each="fieldName : ${consoleTable.header.cells}" th:text="*{fieldName}"></th>
+			</tr>
+			<tr th:each="row : *{consoleTable.rows}">
+			    <td th:each="cell : *{row.cells}" th:text="*{cell}"></td>
+  			</tr>
+		</table>
+	</div>
+</body>
+
+</html>

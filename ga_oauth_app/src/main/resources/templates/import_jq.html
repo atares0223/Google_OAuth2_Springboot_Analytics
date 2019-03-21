@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+<script th:inline="javascript" th:fragment="jq(is_form)">
+document.write( "<script type='text/javascript' src = '/jquery-3.3.1.min.js'><\/script>");
+if([[${is_form}]]){
+	document.write( "<script type='text/javascript' src = '/jquery.form.js'><\/script>");
+}
+</script>
+</head>
+  
+</html>
+
